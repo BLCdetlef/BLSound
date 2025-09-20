@@ -1,7 +1,13 @@
 let num = '';
 let player = null;
 
-// holt oder erstellt den Player
+// Hilfsfunktion: immer gleiche Quelle mit Zeitstempel anhängen,
+// damit GitHub Pages / CDN keine alte 404 serviert
+function cacheBust(url) {
+  return `${url}?v=${Date.now()}`;
+}
+
+// Player-Objekt holen oder neu erstellen
 function getPlayer() {
   if (player) return player;
   player = document.getElementById('player');
@@ -12,40 +18,46 @@ function getPlayer() {
   return player;
 }
 
-function playByCode(code) {
+// Dynamisches Abspielen mit Fallback auf 999.mp3
+async function playByCode(code) {
   const p = getPlayer();
 
-  // nichts tun, wenn kein Code eingegeben
-  if (!code || code === '---' || code === '000') {
-    console.log("No valid input, nothing played.");
+  // nichts abspielen, wenn keine Zahl eingegeben
+  if (!code || code === '---') {
     return;
   }
 
-  const primary = `sounds/${code}.mp3`;
-  const fallback = `sounds/999.mp3`;
+  const primary = cacheBust(`./sounds/${code}.mp3`);
+  const fallback = cacheBust(`./sounds/999.mp3`);
 
-  try { p.pause(); } catch(_) {}
+  try { p.pause(); } catch (_) {}
   p.currentTime = 0;
 
-  p.src = primary;
-  p.onerror = () => {
-    console.warn(`${primary} not found, playing fallback`);
-    p.onerror = null; // sonst Endlosschleife
-    p.src = fallback;
-    p.play().catch(console.warn);
-  };
+  try {
+    // versuchen, Datei zu holen
+    const res = await fetch(primary, { cache: 'no-store' });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
 
-  p.play().catch(err => {
-    console.warn('Playback failed, trying fallback', err);
+    // Blob erzeugen und abspielen
+    const blob = await res.blob();
+    const url = URL.createObjectURL(blob);
+    p.src = url;
+    await p.play();
+
+    // Speicher nach ein paar Sekunden freigeben
+    setTimeout(() => URL.revokeObjectURL(url), 5000);
+  } catch (e) {
+    console.warn(`Fehler bei ${primary}, spiele Fallback`, e);
     p.src = fallback;
     p.play().catch(console.warn);
-  });
+  }
 }
 
-// Bedienlogik
+// --- Bedienlogik für das Nummern-Pad ---
+
 function stopAndClear() {
   const p = getPlayer();
-  try { p.pause(); } catch(_) {}
+  try { p.pause(); } catch (_) {}
   p.currentTime = 0;
   num = '';
   update();
@@ -67,7 +79,7 @@ function update() {
 }
 
 function playNumber() {
-  if (!num) return;            // Leereingabe = nichts abspielen
+  if (!num) return; // keine Eingabe → kein Abspielen
   playByCode(num);
 }
 
@@ -77,7 +89,7 @@ function playIntro() {
 
 update();
 
-// Export für onclick im HTML
+// Exporte für onclick im HTML
 window.stopAndClear = stopAndClear;
 window.press = press;
 window.erase = erase;
