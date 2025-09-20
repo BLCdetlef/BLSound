@@ -1,6 +1,27 @@
+// Dynamisches Abspielen mit Fallback auf 999.mp3
+function playByCode(code) {
+  const audio = new Audio(`sounds/${code}.mp3`);
+  let usedFallback = false;
+
+  audio.addEventListener('error', () => {
+    if (usedFallback) return;
+    usedFallback = true;
+    const fallback = new Audio('sounds/999.mp3');
+    fallback.play().catch(console.warn);
+  });
+
+  audio.play().catch(err => {
+    if (!usedFallback) {
+      usedFallback = true;
+      const fallback = new Audio('sounds/999.mp3');
+      fallback.play().catch(console.warn);
+    }
+  });
+}
 
 let num = '';
-let audio = new Audio();  // globaler Audio-Player
+playByCode(code);
+
 
 function stopAndClear() {
   audio.pause();         // Audio stoppen
