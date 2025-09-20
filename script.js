@@ -1,40 +1,48 @@
 let num = '';
 let player = null;
 
-// einmalig sicherstellen, dass ein Player existiert (nutzt <audio id="player"> wenn vorhanden)
+// holt oder erstellt den Player
 function getPlayer() {
   if (player) return player;
   player = document.getElementById('player');
   if (!player) {
     player = new Audio();
     player.id = 'player';
-    // optional ins DOM hängen:
-    // document.body.appendChild(player);
   }
   return player;
 }
 
-// robust: prüft erst per HEAD, ob die Datei existiert, sonst 999.mp3
-async function playByCode(code) {
+function playByCode(code) {
   const p = getPlayer();
+
+  // nichts tun, wenn kein Code eingegeben
+  if (!code || code === '---' || code === '000') {
+    console.log("No valid input, nothing played.");
+    return;
+  }
+
   const primary = `sounds/${code}.mp3`;
   const fallback = `sounds/999.mp3`;
 
-  // stoppen/auf Null
   try { p.pause(); } catch(_) {}
   p.currentTime = 0;
 
-  try {
-    const res = await fetch(primary, { method: 'HEAD', cache: 'no-store' });
-    p.src = (res.ok ? primary : fallback);
-    await p.play();
-  } catch (e) {
+  p.src = primary;
+  p.onerror = () => {
+    console.warn(`${primary} not found, playing fallback`);
+    p.onerror = null; // sonst Endlosschleife
     p.src = fallback;
     p.play().catch(console.warn);
-  }
+  };
+
+  p.play().catch(err => {
+    console.warn('Playback failed, trying fallback', err);
+    p.src = fallback;
+    p.play().catch(console.warn);
+  });
 }
 
-// UI-Logik
+// Bedienlogik
 function stopAndClear() {
   const p = getPlayer();
   try { p.pause(); } catch(_) {}
@@ -58,20 +66,18 @@ function update() {
   if (el) el.textContent = (num || '').padEnd(3, '-');
 }
 
-// OK/Bestätigen
 function playNumber() {
-  const code = num || '000';   // leer → 000
-  playByCode(code);
+  if (!num) return;            // Leereingabe = nichts abspielen
+  playByCode(num);
 }
 
-// Intro-Button
 function playIntro() {
-  playByCode('BLC_introaudio');  // erwartet sounds/BLC_introaudio.mp3
+  playByCode('BLC_introaudio'); // erwartet sounds/BLC_introaudio.mp3
 }
 
 update();
 
-// Falls du die Funktionen im HTML per onclick nutzt:
+// Export für onclick im HTML
 window.stopAndClear = stopAndClear;
 window.press = press;
 window.erase = erase;
