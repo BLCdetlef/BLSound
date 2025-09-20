@@ -1,38 +1,46 @@
 let num = '';
-let audio = null; // globale Referenz für Stop/Play
+let player = null;
 
-// Dynamisches Abspielen mit Fallback auf 999.mp3
-function playByCode(code) {
-  if (audio) {
-    audio.pause();
-    audio.currentTime = 0;
+// einmalig sicherstellen, dass ein Player existiert (nutzt <audio id="player"> wenn vorhanden)
+function getPlayer() {
+  if (player) return player;
+  player = document.getElementById('player');
+  if (!player) {
+    player = new Audio();
+    player.id = 'player';
+    // optional ins DOM hängen:
+    // document.body.appendChild(player);
   }
+  return player;
+}
 
+// robust: prüft erst per HEAD, ob die Datei existiert, sonst 999.mp3
+async function playByCode(code) {
+  const p = getPlayer();
   const primary = `sounds/${code}.mp3`;
   const fallback = `sounds/999.mp3`;
 
-  audio = new Audio(primary);
+  // stoppen/auf Null
+  try { p.pause(); } catch(_) {}
+  p.currentTime = 0;
 
-  audio.onerror = () => {
-    audio.onerror = null; // Endlosschleife verhindern
-    audio = new Audio(fallback);
-    audio.play().catch(console.warn);
-  };
-
-  audio.play().catch(err => {
-    console.warn('Playback failed, using fallback:', err);
-    audio = new Audio(fallback);
-    audio.play().catch(console.warn);
-  });
+  try {
+    const res = await fetch(primary, { method: 'HEAD', cache: 'no-store' });
+    p.src = (res.ok ? primary : fallback);
+    await p.play();
+  } catch (e) {
+    p.src = fallback;
+    p.play().catch(console.warn);
+  }
 }
 
+// UI-Logik
 function stopAndClear() {
-  if (audio) {
-    audio.pause();         
-    audio.currentTime = 0; 
-  }
-  num = '';              
-  update();              
+  const p = getPlayer();
+  try { p.pause(); } catch(_) {}
+  p.currentTime = 0;
+  num = '';
+  update();
 }
 
 function press(d) {
@@ -46,17 +54,26 @@ function erase() {
 }
 
 function update() {
-  document.getElementById('display').textContent = num.padEnd(3, '-');
+  const el = document.getElementById('display');
+  if (el) el.textContent = (num || '').padEnd(3, '-');
 }
 
-// Bestätigen → 3-stellige Zahl abspielen
+// OK/Bestätigen
 function playNumber() {
-  const code = num || '000'; // falls leer → 000
+  const code = num || '000';   // leer → 000
   playByCode(code);
 }
 
+// Intro-Button
 function playIntro() {
-  playByCode('BLC_introaudio'); // Intro-Datei
+  playByCode('BLC_introaudio');  // erwartet sounds/BLC_introaudio.mp3
 }
 
 update();
+
+// Falls du die Funktionen im HTML per onclick nutzt:
+window.stopAndClear = stopAndClear;
+window.press = press;
+window.erase = erase;
+window.playNumber = playNumber;
+window.playIntro = playIntro;
