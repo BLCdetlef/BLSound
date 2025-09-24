@@ -297,15 +297,12 @@
                     <button class="numpad-key" onclick="inputNumber('0')">0</button>
                     <button class="numpad-key play" id="playStopButton" onclick="togglePlayStop()">▶</button>
                 </div>
-                
-                <!-- Status Message unter dem Numpad -->
-                <div id="statusMessage" class="status-message" style="display: none;"></div>
             </div>
             
             <!-- Info Container -->
             <div class="info-container">
                 <img id="infoImage" 
-                     src="/files/standard.jpg" 
+                     src="files/standard.jpg" 
                      alt="BLSound Info Bild" 
                      class="info-image">
                 <div class="info-header">
@@ -434,16 +431,10 @@
             numberInput.dispatchEvent(new Event('input', { bubbles: true }));
         }
         
-        // Status-Nachricht anzeigen
+        // Status-Nachricht anzeigen (entfernt)
         function showStatus(message, isError = false) {
-            statusMessage.textContent = message;
-            statusMessage.className = isError ? 'status-message status-error' : 'status-message status-success';
-            statusMessage.style.display = 'block';
-            
-            // Nach 3 Sekunden ausblenden
-            setTimeout(() => {
-                statusMessage.style.display = 'none';
-            }, 3000);
+            // Status-Nachrichten werden nicht mehr angezeigt
+            console.log(message);
         }
         
         // Datei existiert prüfen
@@ -540,28 +531,11 @@
             }
         }
         
-        // Audio stoppen und zurücksetzen
-        function stopAudio() {
-            audioPlayer.pause();
-            audioPlayer.currentTime = 0;
-            audioPlayer.style.display = 'none';
-            isPlaying = false;
-            
-            // Button zurück auf Play setzen
-            playStopButton.textContent = '▶';
-            playStopButton.className = 'numpad-key play';
-            
-            // Zurück zum Standard-Content
-            resetToDefault();
-            
-            showStatus('Wiedergabe gestoppt');
-        }
-        
         // Play Button Funktion (überarbeitet)
         async function playNumber() {
             const number = numberInput.value;
             if (!number) {
-                showStatus('Bitte geben Sie eine Nummer ein!', true);
+                console.log('Bitte geben Sie eine Nummer ein!');
                 return;
             }
             
@@ -592,9 +566,8 @@
                         playStopButton.textContent = '⏹';
                         playStopButton.className = 'numpad-key stop';
                         
-                        showStatus(`Spiele Nummer ${paddedNumber} ab`);
+                        console.log(`Spiele Nummer ${paddedNumber} ab`);
                     } catch (playError) {
-                        showStatus('Fehler beim Abspielen der Audio-Datei', true);
                         console.error('Fehler beim Abspielen:', playError);
                         return;
                     }
@@ -634,7 +607,7 @@
                     
                 } else {
                     // Keine Audio-Datei gefunden - zeige nosound Inhalte
-                    showStatus(`Keine Audio-Datei für Nummer ${paddedNumber} gefunden`, true);
+                    console.log(`Keine Audio-Datei für Nummer ${paddedNumber} gefunden`);
                     
                     // nosound.svg anzeigen
                     infoImage.src = 'files/nosound.svg';
@@ -662,14 +635,30 @@
                 backButton.style.display = 'block';
                 
             } catch (error) {
-                showStatus('Fehler beim Laden der Dateien', true);
-                console.error('Fehler:', error);
+                console.error('Fehler beim Laden der Dateien:', error);
             }
             
             // Eingabefeld leeren
             setTimeout(() => {
                 numberInput.value = '';
             }, 1000);
+        }
+        
+        // Audio stoppen und zurücksetzen
+        function stopAudio() {
+            audioPlayer.pause();
+            audioPlayer.currentTime = 0;
+            audioPlayer.style.display = 'none';
+            isPlaying = false;
+            
+            // Button zurück auf Play setzen
+            playStopButton.textContent = '▶';
+            playStopButton.className = 'numpad-key play';
+            
+            // Zurück zum Standard-Content
+            resetToDefault();
+            
+            console.log('Wiedergabe gestoppt');
         }
         
         // Audio-Player Event Listener (überarbeitet)
@@ -680,7 +669,7 @@
             playStopButton.textContent = '▶';
             playStopButton.className = 'numpad-key play';
             
-            showStatus('Wiedergabe beendet');
+            console.log('Wiedergabe beendet');
         });
         
         audioPlayer.addEventListener('error', function() {
@@ -690,7 +679,7 @@
             playStopButton.textContent = '▶';
             playStopButton.className = 'numpad-key play';
             
-            showStatus('Fehler beim Laden der Audio-Datei', true);
+            console.error('Fehler beim Laden der Audio-Datei');
         });
         
         // Beim Laden der Seite
