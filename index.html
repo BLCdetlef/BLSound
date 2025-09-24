@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BLSound - Kiosk System</title>
+    <title>BLSound - Soundboard</title>
     
     <style>
         body {
@@ -12,6 +12,7 @@
             padding: 20px;
             background-color: #1d1d1b;
             color: white;
+            overflow: hidden;
         }
         
         .main-container {
@@ -26,10 +27,9 @@
         }
         
         .container, .info-container {
-            background: #464646;
+            background: none;
             padding: 40px;
             border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
         
         .input-group {
@@ -81,10 +81,10 @@
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 10px;
-            max-width: 300px;
+            max-width: 400px;
             margin: 30px auto;
             padding: 20px;
-            background: #070706;
+            background: #2d2d2d;
             border-radius: 10px;
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
@@ -102,7 +102,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            min-height: 60px;
+            min-height: 90px;
         }
         
         .numpad-key:hover {
@@ -131,6 +131,16 @@
         
         .numpad-key.play:hover {
             background-color: #45a049;
+        }
+        
+        /* Stop-Button Styling */
+        .numpad-key.stop {
+            background-color: #FFC107;
+            color: #333;
+        }
+        
+        .numpad-key.stop:hover {
+            background-color: #FFB300;
         }
         
         /* Info Container Styling */
@@ -165,8 +175,8 @@
         
         .info-image {
             width: 100%;
-            max-width: 300px;
-            height: 200px;
+            max-width: 500px;
+            height: 250px;
             object-fit: cover;
             border-radius: 10px;
             margin: 20px auto;
@@ -180,6 +190,37 @@
             color: white;
             text-align: justify;
             margin-top: 20px;
+            max-height: 250px;
+            overflow-y: auto;
+            padding: 15px;
+            background-color: #2d2d2d;
+            border-radius: 8px;
+            border: 0px solid #555;
+        }
+        
+        /* Scrollbar Styling für Webkit-Browser */
+        .info-text::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        .info-text::-webkit-scrollbar-track {
+            background: #464646;
+            border-radius: 4px;
+        }
+        
+        .info-text::-webkit-scrollbar-thumb {
+            background: #666;
+            border-radius: 4px;
+        }
+        
+        .info-text::-webkit-scrollbar-thumb:hover {
+            background: #777;
+        }
+        
+        /* Scrollbar für Firefox */
+        .info-text {
+            scrollbar-width: thin;
+            scrollbar-color: #666 #464646;
         }
         
         /* Audio Player Styling */
@@ -233,8 +274,10 @@
         <div class="content-wrapper">
             <!-- Numpad Container -->
             <div class="container">
-                <h1 style="text-align: center;">BRUCHLASTchart</h1>
-                
+                <h1 style="text-align: center; font-size: 50px; line-height: 1; margin-bottom: 0;">
+                  <b>BRUCHLAST</b><span style="font-family: 'Sora', Arial, sans-serif; font-weight: 800; font-style: italic; color: #FFC107;">sounds</span>
+                </h1>
+                <link href="https://fonts.googleapis.com/css2?family=Sora:ital,wght@1,800&display=swap" rel="stylesheet">
                 <div class="input-group">
                     <input type="number" id="numberInput" placeholder="Nummer hier eingeben..." readonly maxlength="3">
                 </div>
@@ -252,7 +295,7 @@
                     <button class="numpad-key" onclick="inputNumber('3')">3</button>
                     <button class="numpad-key backspace" onclick="backspace()">⌫</button>
                     <button class="numpad-key" onclick="inputNumber('0')">0</button>
-                    <button class="numpad-key play" onclick="playNumber()">▶</button>
+                    <button class="numpad-key play" id="playStopButton" onclick="togglePlayStop()">▶</button>
                 </div>
                 
                 <!-- Status Message unter dem Numpad -->
@@ -261,15 +304,14 @@
             
             <!-- Info Container -->
             <div class="info-container">
-                <div class="info-header">
-                    <button id="backButton" class="back-button" onclick="resetToDefault()" style="display: none;">← Zurück</button>
-                    <h2 id="infoTitle">Informationen</h2>
-                </div>
-                
                 <img id="infoImage" 
                      src="/files/standard.jpg" 
                      alt="BLSound Info Bild" 
                      class="info-image">
+                <div class="info-header">
+                    <button id="backButton" class="back-button" onclick="resetToDefault()" style="display: none;">← Zurück</button>
+                    <h2 id="infoTitle">Informationen</h2>
+                </div>
                 
                 <!-- Audio Player unter dem Bild -->
                 <audio id="audioPlayer" class="audio-player" controls>
@@ -291,6 +333,11 @@
         const infoTitle = document.getElementById('infoTitle');
         const statusMessage = document.getElementById('statusMessage');
         const backButton = document.getElementById('backButton');
+        const playStopButton = document.getElementById('playStopButton');
+        
+        // Spielstatus verfolgen
+        let isPlaying = false;
+        let currentAudioUrl = null;
         
         // Ursprungswerte für Reset - werden beim Laden gesetzt
         let defaultTitle = "Informationen";
@@ -352,9 +399,17 @@
             infoTitle.textContent = defaultTitle;
             infoImage.src = defaultImage;
             infoText.innerHTML = defaultText;
+            infoText.style.display = 'block'; // Textfeld beim Reset wieder anzeigen
             audioPlayer.style.display = 'none';
-            audioPlayer.pause();
             backButton.style.display = 'none';
+            
+            // Audio stoppen falls es läuft
+            if (isPlaying) {
+                audioPlayer.pause();
+                isPlaying = false;
+                playStopButton.textContent = '▶';
+                playStopButton.className = 'numpad-key play';
+            }
         }
         
         // Zahl eingeben (auf 3 Zeichen begrenzt)
@@ -474,7 +529,35 @@
             return null;
         }
         
-        // Play Button Funktion
+        // Play/Stop Toggle Funktion
+        function togglePlayStop() {
+            if (isPlaying) {
+                // Audio stoppen
+                stopAudio();
+            } else {
+                // Audio abspielen
+                playNumber();
+            }
+        }
+        
+        // Audio stoppen und zurücksetzen
+        function stopAudio() {
+            audioPlayer.pause();
+            audioPlayer.currentTime = 0;
+            audioPlayer.style.display = 'none';
+            isPlaying = false;
+            
+            // Button zurück auf Play setzen
+            playStopButton.textContent = '▶';
+            playStopButton.className = 'numpad-key play';
+            
+            // Zurück zum Standard-Content
+            resetToDefault();
+            
+            showStatus('Wiedergabe gestoppt');
+        }
+        
+        // Play Button Funktion (überarbeitet)
         async function playNumber() {
             const number = numberInput.value;
             if (!number) {
@@ -497,73 +580,116 @@
                 }
                 
                 if (audioExists) {
+                    currentAudioUrl = audioUrl;
                     audioPlayer.src = audioUrl;
                     audioPlayer.style.display = 'block';
                     
                     try {
                         await audioPlayer.play();
+                        isPlaying = true;
+                        
+                        // Button zu Stop ändern
+                        playStopButton.textContent = '⏹';
+                        playStopButton.className = 'numpad-key stop';
+                        
                         showStatus(`Spiele Nummer ${paddedNumber} ab`);
                     } catch (playError) {
                         showStatus('Fehler beim Abspielen der Audio-Datei', true);
                         console.error('Fehler beim Abspielen:', playError);
-                    }
-                } else {
-                    showStatus(`Audio-Datei für Nummer ${paddedNumber} nicht gefunden`, true);
-                }
-                
-                // Bild laden
-                const imageUrl = await findImage(paddedNumber);
-                if (imageUrl) {
-                    infoImage.src = imageUrl;
-                    infoImage.alt = `Bild für Nummer ${paddedNumber}`;
-                } else {
-                    // sound.svg als Fallback verwenden wenn kein spezifisches Bild gefunden wird
-                    infoImage.src = 'files/sound.svg';
-                    infoImage.alt = `Audio-Symbol für Nummer ${paddedNumber}`;
-                    console.log(`Kein Bild für Nummer ${paddedNumber} gefunden, verwende sound.svg`);
-                }
-                
-                // HTML-Content laden
-                const htmlData = await loadHtmlFile(paddedNumber);
-                if (htmlData) {
-                    // Wenn ein Titel in der HTML-Datei gefunden wurde, diesen verwenden
-                    if (htmlData.title) {
-                        infoTitle.textContent = htmlData.title;
-                    } else {
-                        infoTitle.textContent = `Nummer ${paddedNumber}`;
+                        return;
                     }
                     
-                    // HTML-Inhalt anzeigen
-                    infoText.innerHTML = htmlData.content;
+                    // Bild laden (nur wenn Audio vorhanden)
+                    const imageUrl = await findImage(paddedNumber);
+                    if (imageUrl) {
+                        infoImage.src = imageUrl;
+                        infoImage.alt = `Bild für Nummer ${paddedNumber}`;
+                    } else {
+                        // sound.svg als Fallback verwenden wenn kein spezifisches Bild gefunden wird
+                        infoImage.src = 'files/sound.svg';
+                        infoImage.alt = `Audio-Symbol für Nummer ${paddedNumber}`;
+                        console.log(`Kein Bild für Nummer ${paddedNumber} gefunden, verwende sound.svg`);
+                    }
+                    
+                    // HTML-Content laden (nur wenn Audio vorhanden)
+                    const htmlData = await loadHtmlFile(paddedNumber);
+                    if (htmlData) {
+                        // Wenn ein Titel in der HTML-Datei gefunden wurde, diesen verwenden
+                        if (htmlData.title) {
+                            infoTitle.textContent = htmlData.title;
+                        } else {
+                            infoTitle.textContent = `Nummer ${paddedNumber}`;
+                        }
+                        
+                        // HTML-Inhalt anzeigen und Textfeld einblenden
+                        infoText.innerHTML = htmlData.content;
+                        infoText.style.display = 'block';
+                    } else {
+                        // Textfeld komplett verstecken wenn keine HTML-Datei gefunden wird
+                        infoText.innerHTML = '';
+                        infoText.style.display = 'none';
+                        infoTitle.textContent = `Nummer ${paddedNumber}`;
+                        console.log(`Keine HTML-Datei für Nummer ${paddedNumber} gefunden`);
+                    }
+                    
                 } else {
-                    // Keinen Text anzeigen wenn keine HTML-Datei gefunden wird
-                    infoText.innerHTML = '';
-                    infoTitle.textContent = `Nummer ${paddedNumber}`;
-                    console.log(`Keine HTML-Datei für Nummer ${paddedNumber} gefunden`);
+                    // Keine Audio-Datei gefunden - zeige nosound Inhalte
+                    showStatus(`Keine Audio-Datei für Nummer ${paddedNumber} gefunden`, true);
+                    
+                    // nosound.svg anzeigen
+                    infoImage.src = 'files/nosound.svg';
+                    infoImage.alt = `Keine Audio-Datei für Nummer ${paddedNumber}`;
+                    
+                    // nosound.html laden und anzeigen
+                    const nosoundData = await loadHtmlFile('nosound');
+                    if (nosoundData) {
+                        if (nosoundData.title) {
+                            infoTitle.textContent = nosoundData.title;
+                        } else {
+                            infoTitle.textContent = `Nummer ${paddedNumber} - Keine Audiodatei`;
+                        }
+                        infoText.innerHTML = nosoundData.content;
+                        infoText.style.display = 'block';
+                    } else {
+                        // Fallback falls nosound.html nicht gefunden wird
+                        infoTitle.textContent = `Nummer ${paddedNumber} - Keine Audiodatei`;
+                        infoText.innerHTML = '<p>Für diese Nummer ist keine Audiodatei verfügbar.</p>';
+                        infoText.style.display = 'block';
+                    }
                 }
                 
-                // Zurück-Button anzeigen wenn Inhalte geladen wurden
-                if (audioExists || imageUrl || htmlData) {
-                    backButton.style.display = 'block';
-                }
+                // Zurück-Button anzeigen wenn Inhalte geladen wurden (auch bei nosound)
+                backButton.style.display = 'block';
                 
             } catch (error) {
                 showStatus('Fehler beim Laden der Dateien', true);
                 console.error('Fehler:', error);
             }
             
-            // Nach dem Abspielen das Feld leeren
+            // Eingabefeld leeren
             setTimeout(() => {
                 numberInput.value = '';
             }, 1000);
         }
         
-        // Audio-Player Event Listener
+        // Audio-Player Event Listener (überarbeitet)
         audioPlayer.addEventListener('ended', function() {
+            isPlaying = false;
+            
+            // Button zurück auf Play setzen
+            playStopButton.textContent = '▶';
+            playStopButton.className = 'numpad-key play';
+            
             showStatus('Wiedergabe beendet');
         });
         
         audioPlayer.addEventListener('error', function() {
+            isPlaying = false;
+            
+            // Button zurück auf Play setzen
+            playStopButton.textContent = '▶';
+            playStopButton.className = 'numpad-key play';
+            
             showStatus('Fehler beim Laden der Audio-Datei', true);
         });
         
