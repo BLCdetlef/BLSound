@@ -9,31 +9,50 @@
         body {
             font-family: Arial, sans-serif;
             margin: 0;
-            padding: 20px;
+            padding: 0;
             background-color: #1d1d1b;
             color: white;
+            height: 100vh;
             overflow: hidden;
+            /* Margins für 2000x1200px Display: 7mm oben, 20mm Seiten, 13mm unten */
+            padding: 1.85vh 4vw 3.43vh 4vw;
+            box-sizing: border-box;
         }
         
         .main-container {
-            max-width: 1200px;
-            margin: 0 auto;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
         }
         
         .content-wrapper {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 30px;
+            gap: 3vw;
+            flex: 1;
+            min-height: 0;
+            max-height: 90vh;
         }
         
         .container, .info-container {
             background: none;
-            padding: 40px;
-            border-radius: 10px;
+            padding: 2vh 2vw;
+            border-radius: 0vw;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
         }
         
         .input-group {
-            margin: 20px 0;
+            margin: 2vh 0;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -41,18 +60,18 @@
         
         label {
             display: block;
-            margin-bottom: 5px;
+            margin-bottom: 0.5vh;
             font-weight: bold;
             text-align: center;
         }
         
         input[type="number"] {
-            width: 300px;
-            max-width: 300px;
-            padding: 15px;
-            font-size: 24px;
+            width: 80%;
+            max-width: 25vw;
+            padding: 1.5vh 2vw;
+            font-size: clamp(18px, 2vw, 32px);
             border: 2px solid #ddd;
-            border-radius: 5px;
+            border-radius: 0.5vw;
             box-sizing: border-box;
             text-align: center;
             margin: 0 auto;
@@ -65,31 +84,49 @@
             -webkit-appearance: none;
             margin: 0;
         }
+    
         
         input[type="number"]:focus {
             border-color: #4CAF50;
             outline: none;
         }
         
+        /* Titel */
+        .main-title {
+            text-align: center;
+            font-size: clamp(24px, 4vw, 60px);
+            line-height: 1;
+            margin-bottom: 2vh;
+            font-weight: bold;
+        }
+        
+        .main-title .subtitle {
+            font-family: 'Sora', Arial, sans-serif;
+            font-weight: 800;
+            font-style: italic;
+            color: #FFC107;
+        }
+        
         /* Numpad Styling */
         .numpad {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-            max-width: 400px;
-            margin: 30px auto;
-            padding: 20px;
+            gap: 1vw;
+            min-width: 20vw;
+            max-height: 70vh;
+            margin: 3vh auto;
+            padding: 2vh 2vw;
             background: #2d2d2d;
-            border-radius: 10px;
+            border-radius: 1vw;
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
         
         .numpad-key {
             background-color: #1d1d1b;
-            border: 0px solid #ddd;
-            border-radius: 8px;
-            padding: 20px;
-            font-size: 24px;
+            border: none;
+            border-radius: 0.8vw;
+            padding: 1vh 1vw;
+            font-size: clamp(18px, 2vw, 36px);
             font-weight: bold;
             color: white;
             cursor: pointer;
@@ -97,12 +134,13 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            min-height: 90px;
+            aspect-ratio: 1;
+            min-height: 1vh;
         }
         
         .numpad-key:hover {
             background-color: #e8f5e8;
-            border-color: #4CAF50;
+            color: #333;
         }
         
         .numpad-key:active {
@@ -143,25 +181,43 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 15px;
-            margin-bottom: 20px;
+            gap: 2vw;
+            margin-bottom: 2vh;
         }
         
         .info-container h2 {
             color: white;
             margin: 0;
             text-align: center;
+            font-size: clamp(18px, 2.5vw, 36px);
         }
         
         .back-button {
             background-color: #6c757d;
             color: white;
             border: none;
-            padding: 8px 16px;
-            border-radius: 5px;
+            padding: 1vh 2vw;
+            border-radius: 0.5vw;
             cursor: pointer;
-            font-size: 14px;
+            font-size: clamp(12px, 1.2vw, 18px);
             transition: all 0.2s;
+        }
+        .info-button {
+            background-color: #6c757d;
+            color: white;
+            border: none;
+            padding: 2vh 2vw;
+            border-radius: 0.5vw;
+            cursor: pointer;
+            font-size: clamp(12px, 1.2vw, 18px);
+            transition: all 0.2s;
+            height: 6vh;
+            min-width: 10vw;
+            margin: 0 1vw;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-sizing: border-box;
         }
         
         .back-button:hover {
@@ -170,42 +226,43 @@
         
         .info-image {
             width: 100%;
-            max-width: 500px;
-            height: 250px;
+            height: 25vh;
             object-fit: cover;
-            border-radius: 10px;
-            margin: 20px auto;
+            border-radius: 1vw;
+            margin: 2vh auto;
             display: block;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
         
         .info-text {
-            font-size: 16px;
+            font-size: clamp(14px, 1.4vw, 20px);
             line-height: 1.6;
             color: white;
             text-align: justify;
-            margin-top: 20px;
-            max-height: 250px;
+            margin-top: 2vh;
+            flex: 1;
             overflow-y: auto;
-            padding: 15px;
+            padding: 2vh 2vw;
             background-color: #2d2d2d;
-            border-radius: 8px;
-            border: 0px solid #555;
+            border-radius: 0.8vw;
+            border: none;
+            min-height: 15vh;
+            max-height: 40vh;
         }
         
         /* Scrollbar Styling für Webkit-Browser */
         .info-text::-webkit-scrollbar {
-            width: 8px;
+            width: 0.5vw;
         }
         
         .info-text::-webkit-scrollbar-track {
             background: #464646;
-            border-radius: 4px;
+            border-radius: 0.25vw;
         }
         
         .info-text::-webkit-scrollbar-thumb {
             background: #666;
-            border-radius: 4px;
+            border-radius: 0.25vw;
         }
         
         .info-text::-webkit-scrollbar-thumb:hover {
@@ -220,46 +277,114 @@
         
         /* Audio Player Styling */
         .audio-player {
-            margin: 20px auto;
+            margin: 2vh auto;
             width: 100%;
-            max-width: 300px;
+            height: 5vh;
             display: none;
         }
         
-        .status-message {
-            text-align: center;
-            padding: 10px;
-            margin: 10px 0;
-            border-radius: 5px;
-            font-weight: bold;
-        }
-        
-        .status-success {
-            background-color: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
-        }
-        
-        .status-error {
-            background-color: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
-        }
-        
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .content-wrapper {
-                grid-template-columns: 1fr;
-                gap: 20px;
+        /* Desktop: Kein Scrolling */
+        @media (min-width: 1201px) {
+            body {
+                overflow: hidden;
             }
             
             .main-container {
-                padding: 10px;
+                height: 100vh;
+                overflow: hidden;
+            }
+        }
+        
+        /* Tablets: Zwei-Spalten Layout mit begrenzter Höhe */
+        @media (max-width: 1200px) and (min-width: 769px) {
+            body {
+                overflow: hidden;
+            }
+            
+            .content-wrapper {
+                grid-template-columns: 1fr;
+                gap: 3vh;
+                overflow-y: auto;
+            }
+            
+            body {
+                padding: 2vh 3vw;
             }
             
             .info-header {
                 flex-direction: column;
-                gap: 10px;
+                gap: 1vh;
+            }
+            
+            .numpad {
+                max-width: 60vw;
+            }
+            
+            .info-image {
+                height: 30vh;
+            }
+            
+            .info-text {
+                min-height: 20vh;
+                max-height: 30vh;
+            }
+        }
+        
+        /* Mobile: Scrollbares Ein-Spalten Layout */
+        @media (max-width: 768px) {
+            body {
+                overflow-y: auto;
+                overflow-x: hidden;
+                height: auto;
+                min-height: 100vh;
+                padding: 2vh 3vw;
+            }
+            
+            .main-container {
+                height: auto;
+                min-height: calc(100vh - 4vh);
+            }
+            
+            .content-wrapper {
+                grid-template-columns: 1fr;
+                gap: 4vh;
+            }
+            
+            .container, .info-container {
+                overflow: visible;
+            }
+            
+            .numpad {
+                max-width: 90vw;
+                gap: 2vw;
+                margin: 2vh auto;
+            }
+            
+            .numpad-key {
+                min-height: 12vh;
+                padding: 2vh 2vw;
+            }
+            
+            .info-image {
+                height: 30vh;
+            }
+            
+            .info-text {
+                min-height: 20vh;
+                max-height: 40vh;
+            }
+            
+            /* Mobile Scrollbar */
+            .info-text::-webkit-scrollbar {
+                width: 8px;
+            }
+        }
+        
+        /* Spezifische Anpassungen für 2000x1200px Display */
+        @media (min-width: 1900px) and (min-height: 1100px) {
+            body {
+                /* 7mm = ca. 26px bei 96dpi, 13mm = ca. 49px */
+                padding: calc(7mm * 0.75) calc(20mm * 0.75) calc(13mm * 0.75) calc(20mm * 0.75);
             }
         }
     </style>
@@ -269,10 +394,10 @@
         <div class="content-wrapper">
             <!-- Numpad Container -->
             <div class="container">
-                <h1 style="text-align: center; font-size: 50px; line-height: 1; margin-bottom: 0;">
-                  <b>BRUCHLAST</b><span style="font-family: 'Sora', Arial, sans-serif; font-weight: 800; font-style: italic; color: #FFC107;">sounds</span>
+                <h1 class="main-title">
+                    <b>BRUCHLAST</b><span class="subtitle">sound</span>
                 </h1>
-                <link href="https://fonts.googleapis.com/css2?family=Sora:ital,wght@1,800&display=swap" rel="stylesheet">
+                
                 <div class="input-group">
                     <input type="number" id="numberInput" placeholder="Nummer hier eingeben..." readonly maxlength="3">
                 </div>
@@ -300,6 +425,7 @@
                      src="files/standard.jpg" 
                      alt="BLSound Info Bild" 
                      class="info-image">
+                
                 <div class="info-header">
                     <button id="backButton" class="back-button" onclick="resetToDefault()" style="display: none;">← Zurück</button>
                     <h2 id="infoTitle">Informationen</h2>
@@ -315,6 +441,12 @@
                 </div>
             </div>
         </div>
+        <div class="button-container">
+            <button class="info-button" onclick="window.open('https://www.th-luebeck.de/bruchlast/', '_blank')">Bruchlast-Chart</button>
+            <button class="info-button" onclick="setLanguage('de')">🇩🇪 Deutsch</button>
+            <button class="info-button" onclick="setLanguage('en')">🇬🇧 English</button>
+            <button class="info-button" onclick="setLanguage('zh')">🇨🇳 中文</button>
+        </div>
     </div>
 
     <script>
@@ -323,7 +455,6 @@
         const infoImage = document.getElementById('infoImage');
         const infoText = document.getElementById('infoText');
         const infoTitle = document.getElementById('infoTitle');
-        const statusMessage = document.getElementById('statusMessage');
         const backButton = document.getElementById('backButton');
         const playStopButton = document.getElementById('playStopButton');
         
@@ -339,169 +470,107 @@
         // Unterstützte Bildformate
         const imageExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'bmp', 'svg'];
         
-        // Standard-Inhalte laden
+        // Aktuelle Sprache verfolgen
+        let currentLanguage = 'de';
+        
+        // Sprache setzen
+        function setLanguage(lang) {
+            currentLanguage = lang;
+            
+            // Visuelle Anzeige der aktiven Sprache
+            document.querySelectorAll('.info-button').forEach(btn => {
+                btn.style.backgroundColor = '#6c757d';
+                btn.style.color = 'white';
+            });
+            
+            // Aktiven Sprach-Button hervorheben
+            const activeButton = document.querySelector(`[onclick="setLanguage('${lang}')"]`);
+            if (activeButton) {
+                activeButton.style.backgroundColor = '#4CAF50';
+                activeButton.style.color = 'white';
+            }
+            
+            // Standard-Inhalte in neuer Sprache laden
+            loadDefaultContent();
+            
+            console.log(`Sprache gewechselt zu: ${lang}`);
+        }
+        
+        // Dateinamen mit Sprachsuffix generieren
+        function getLocalizedFilename(baseName, extension) {
+            if (currentLanguage === 'de') {
+                return `${baseName}.${extension}`;
+            }
+            return `${baseName}_${currentLanguage}.${extension}`;
+        }
+        
+        // Standard-Inhalte laden (erweitert für Mehrsprachigkeit)
         async function loadDefaultContent() {
             try {
-                const response = await fetch('files/howTo.html');
+                const howToFile = getLocalizedFilename('howTo', 'html');
+                const response = await fetch(`files/${howToFile}`);
+                
                 if (response.ok) {
                     const content = await response.text();
-                    // HTML-Inhalt aus der Datei extrahieren (ohne das h2 Element)
                     const parser = new DOMParser();
                     const doc = parser.parseFromString(content, 'text/html');
                     
-                    // h2 Element für Titel
                     const h2Element = doc.querySelector('h2');
                     if (h2Element) {
                         defaultTitle = h2Element.textContent;
                         infoTitle.textContent = defaultTitle;
-                        h2Element.remove(); // Entfernen damit es nicht doppelt angezeigt wird
+                        h2Element.remove();
                     }
                     
-                    // Restlichen Inhalt für Text
                     defaultText = doc.body.innerHTML;
                     infoText.innerHTML = defaultText;
+                    infoText.style.display = 'block';
                 } else {
-                    // Fallback falls Datei nicht gefunden wird
-                    defaultText = `
-                        <p>Willkommen bei BLSound! Dieses Kiosk-System ermöglicht es Ihnen, durch einfache Eingabe einer dreistelligen Nummer Audioinhalte abzuspielen.</p>
-                        <p><strong>So funktioniert's:</strong></p>
-                        <ul>
-                            <li>Geben Sie eine Nummer zwischen 001 und 999 ein</li>
-                            <li>Verwenden Sie das Numpad für die Eingabe</li>
-                            <li>Drücken Sie den Play-Button (▶) zum Abspielen</li>
-                            <li>Mit dem Backspace (⌫) können Sie Zahlen löschen</li>
-                        </ul>
-                        <p>Das System ist optimiert für Touch-Bedienung und bietet eine intuitive Benutzeroberfläche für alle Altersgruppen.</p>
-                    `;
-                    infoText.innerHTML = defaultText;
+                    // Fallback-Texte je nach Sprache
+                    setFallbackContent();
                 }
+                
+                // Standard-Bild mit Sprachsuffix
+                const standardImage = getLocalizedFilename('standard', 'jpg');
+                if (await fileExists(`files/${standardImage}`)) {
+                    defaultImage = `files/${standardImage}`;
+                    infoImage.src = defaultImage;
+                } else {
+                    // Fallback auf deutsches Standard-Bild
+                    defaultImage = 'files/standard.jpg';
+                    infoImage.src = defaultImage;
+                }
+                
             } catch (error) {
                 console.error('Fehler beim Laden der Standard-Inhalte:', error);
-                // Fallback verwenden
-                defaultText = `
-                    <p>Willkommen bei BLSound! Dieses Kiosk-System ermöglicht es Ihnen, durch einfache Eingabe einer dreistelligen Nummer Audioinhalte abzuspielen.</p>
-                    <p>Verwenden Sie das Numpad zur Eingabe und drücken Sie ▶ zum Abspielen.</p>
-                `;
-                infoText.innerHTML = defaultText;
+                setFallbackContent();
             }
         }
         
-        // Zurück zum Standard-Content
-        function resetToDefault() {
-            infoTitle.textContent = defaultTitle;
-            infoImage.src = defaultImage;
-            infoText.innerHTML = defaultText;
-            infoText.style.display = 'block'; // Textfeld beim Reset wieder anzeigen
-            audioPlayer.style.display = 'none';
-            backButton.style.display = 'none';
-            
-            // Audio stoppen falls es läuft
-            if (isPlaying) {
-                audioPlayer.pause();
-                isPlaying = false;
-                playStopButton.textContent = '▶';
-                playStopButton.className = 'numpad-key play';
-            }
-        }
         
-        // Zahl eingeben (auf 3 Zeichen begrenzt)
-        function inputNumber(digit) {
-            const currentValue = numberInput.value;
-            
-            // Begrenzung auf 3 Zeichen
-            if (currentValue.length < 3) {
-                numberInput.value = currentValue + digit;
-                
-                // Event für Änderung triggern
-                numberInput.dispatchEvent(new Event('input', { bubbles: true }));
-            }
-        }
-        
-        // Letzte Ziffer löschen
-        function backspace() {
-            const currentValue = numberInput.value;
-            numberInput.value = currentValue.slice(0, -1);
-            
-            // Event für Änderung triggern
-            numberInput.dispatchEvent(new Event('input', { bubbles: true }));
-        }
-        
-        // Status-Nachricht anzeigen (entfernt)
-        function showStatus(message, isError = false) {
-            // Status-Nachrichten werden nicht mehr angezeigt
-            console.log(message);
-        }
-        
-        // Datei existiert prüfen
-        async function fileExists(url) {
-            try {
-                const response = await fetch(url, { method: 'HEAD' });
-                return response.ok;
-            } catch (error) {
-                return false;
-            }
-        }
-        
-        // Bild mit verschiedenen Formaten suchen
-        async function findImage(number) {
-            for (const ext of imageExtensions) {
-                const url = `files/${number}.${ext}`;
-                if (await fileExists(url)) {
-                    return url;
-                }
-                // Auch Großbuchstaben testen
-                const urlUpper = `files/${number}.${ext.toUpperCase()}`;
-                if (await fileExists(urlUpper)) {
-                    return urlUpper;
-                }
-            }
-            return null;
-        }
-        
-        // Text-Datei laden
-        async function loadTextFile(number) {
-            try {
-                // Zuerst .txt versuchen
-                let response = await fetch(`files/${number}.txt`);
-                if (!response.ok) {
-                    // Dann .TXT versuchen
-                    response = await fetch(`files/${number}.TXT`);
-                }
-                
-                if (response.ok) {
-                    return await response.text();
-                }
-            } catch (error) {
-                console.log('Text-Datei nicht gefunden:', error);
-            }
-            return null;
-        }
-        
-        // HTML-Datei laden
+        // HTML-Datei laden (erweitert für Mehrsprachigkeit)
         async function loadHtmlFile(number) {
             try {
-                // Zuerst .html versuchen
-                let response = await fetch(`files/${number}.html`);
+                const htmlFile = getLocalizedFilename(number, 'html');
+                let response = await fetch(`files/${htmlFile}`);
+                
                 if (!response.ok) {
-                    // Dann .HTML versuchen
-                    response = await fetch(`files/${number}.HTML`);
+                    const htmlFileUpper = getLocalizedFilename(number, 'HTML');
+                    response = await fetch(`files/${htmlFileUpper}`);
                 }
                 
                 if (response.ok) {
                     const content = await response.text();
-                    // HTML-Inhalt parsen
                     const parser = new DOMParser();
                     const doc = parser.parseFromString(content, 'text/html');
                     
-                    // h2 Element für Titel suchen
                     const h2Element = doc.querySelector('h2');
                     let title = null;
                     if (h2Element) {
                         title = h2Element.textContent;
-                        h2Element.remove(); // Entfernen damit es nicht doppelt angezeigt wird
+                        h2Element.remove();
                     }
                     
-                    // Restlichen Inhalt für Text
                     const htmlContent = doc.body.innerHTML;
                     
                     return {
@@ -515,18 +584,36 @@
             return null;
         }
         
-        // Play/Stop Toggle Funktion
-        function togglePlayStop() {
-            if (isPlaying) {
-                // Audio stoppen
-                stopAudio();
-            } else {
-                // Audio abspielen
-                playNumber();
+        // Bild mit verschiedenen Formaten und Sprachen suchen
+        async function findImage(number) {
+            for (const ext of imageExtensions) {
+                // Erst mit Sprachsuffix versuchen
+                const localizedUrl = `files/${getLocalizedFilename(number, ext)}`;
+                if (await fileExists(localizedUrl)) {
+                    return localizedUrl;
+                }
+                
+                const localizedUrlUpper = `files/${getLocalizedFilename(number, ext.toUpperCase())}`;
+                if (await fileExists(localizedUrlUpper)) {
+                    return localizedUrlUpper;
+                }
+                
+                // Fallback auf deutsche Version
+                if (currentLanguage !== 'de') {
+                    const url = `files/${number}.${ext}`;
+                    if (await fileExists(url)) {
+                        return url;
+                    }
+                    const urlUpper = `files/${number}.${ext.toUpperCase()}`;
+                    if (await fileExists(urlUpper)) {
+                        return urlUpper;
+                    }
+                }
             }
+            return null;
         }
         
-        // Play Button Funktion (überarbeitet)
+        // Play Button Funktion (erweitert für Mehrsprachigkeit)
         async function playNumber() {
             const number = numberInput.value;
             if (!number) {
@@ -534,18 +621,27 @@
                 return;
             }
             
-            // Nummer zu 3-stelligem Format konvertieren
             const paddedNumber = number.padStart(3, '0');
             
-            // Audio-Datei laden und abspielen
             try {
-                let audioUrl = `./files/${paddedNumber}.mp3`;
+                // Audio mit Sprachsuffix suchen
+                let audioUrl = `./files/${getLocalizedFilename(paddedNumber, 'mp3')}`;
                 let audioExists = await fileExists(audioUrl);
                 
-                // Falls .mp3 nicht existiert, .MP3 versuchen
                 if (!audioExists) {
-                    audioUrl = `./files/${paddedNumber}.MP3`;
+                    audioUrl = `./files/${getLocalizedFilename(paddedNumber, 'MP3')}`;
                     audioExists = await fileExists(audioUrl);
+                }
+                
+                // Fallback auf deutsche Version
+                if (!audioExists && currentLanguage !== 'de') {
+                    audioUrl = `./files/${paddedNumber}.mp3`;
+                    audioExists = await fileExists(audioUrl);
+                    
+                    if (!audioExists) {
+                        audioUrl = `./files/${paddedNumber}.MP3`;
+                        audioExists = await fileExists(audioUrl);
+                    }
                 }
                 
                 if (audioExists) {
@@ -557,7 +653,6 @@
                         await audioPlayer.play();
                         isPlaying = true;
                         
-                        // Button zu Stop ändern
                         playStopButton.textContent = '⏹';
                         playStopButton.className = 'numpad-key stop';
                         
@@ -567,33 +662,27 @@
                         return;
                     }
                     
-                    // Bild laden (nur wenn Audio vorhanden)
                     const imageUrl = await findImage(paddedNumber);
                     if (imageUrl) {
                         infoImage.src = imageUrl;
                         infoImage.alt = `Bild für Nummer ${paddedNumber}`;
                     } else {
-                        // sound.svg als Fallback verwenden wenn kein spezifisches Bild gefunden wird
                         infoImage.src = 'files/sound.svg';
                         infoImage.alt = `Audio-Symbol für Nummer ${paddedNumber}`;
                         console.log(`Kein Bild für Nummer ${paddedNumber} gefunden, verwende sound.svg`);
                     }
                     
-                    // HTML-Content laden (nur wenn Audio vorhanden)
                     const htmlData = await loadHtmlFile(paddedNumber);
                     if (htmlData) {
-                        // Wenn ein Titel in der HTML-Datei gefunden wurde, diesen verwenden
                         if (htmlData.title) {
                             infoTitle.textContent = htmlData.title;
                         } else {
                             infoTitle.textContent = `Nummer ${paddedNumber}`;
                         }
                         
-                        // HTML-Inhalt anzeigen und Textfeld einblenden
                         infoText.innerHTML = htmlData.content;
                         infoText.style.display = 'block';
                     } else {
-                        // Textfeld komplett verstecken wenn keine HTML-Datei gefunden wird
                         infoText.innerHTML = '';
                         infoText.style.display = 'none';
                         infoTitle.textContent = `Nummer ${paddedNumber}`;
@@ -601,39 +690,60 @@
                     }
                     
                 } else {
-                    // Keine Audio-Datei gefunden - zeige nosound Inhalte
                     console.log(`Keine Audio-Datei für Nummer ${paddedNumber} gefunden`);
                     
-                    // nosound.svg anzeigen
-                    infoImage.src = 'files/nosound.svg';
+                    // Nosound SVG und HTML in entsprechender Sprache
+                    const nosoundSvg = getLocalizedFilename('nosound', 'svg');
+                    if (await fileExists(`files/${nosoundSvg}`)) {
+                        infoImage.src = `files/${nosoundSvg}`;
+                    } else {
+                        infoImage.src = 'files/nosound.svg';
+                    }
                     infoImage.alt = `Keine Audio-Datei für Nummer ${paddedNumber}`;
                     
-                    // nosound.html laden und anzeigen
                     const nosoundData = await loadHtmlFile('nosound');
                     if (nosoundData) {
                         if (nosoundData.title) {
                             infoTitle.textContent = nosoundData.title;
                         } else {
-                            infoTitle.textContent = `Nummer ${paddedNumber} - Keine Audiodatei`;
+                            const noAudioTexts = {
+                                'de': `Nummer ${paddedNumber} - Keine Audiodatei`,
+                                'en': `Number ${paddedNumber} - No audio file`,
+                                'zh': `编号 ${paddedNumber} - 没有音频文件`
+                            };
+                            infoTitle.textContent = noAudioTexts[currentLanguage] || noAudioTexts['de'];
                         }
                         infoText.innerHTML = nosoundData.content;
                         infoText.style.display = 'block';
                     } else {
-                        // Fallback falls nosound.html nicht gefunden wird
-                        infoTitle.textContent = `Nummer ${paddedNumber} - Keine Audiodatei`;
-                        infoText.innerHTML = '<p>Für diese Nummer ist keine Audiodatei verfügbar.</p>';
+                        const noAudioTexts = {
+                            'de': {
+                                title: `Nummer ${paddedNumber} - Keine Audiodatei`,
+                                content: '<p>Für diese Nummer ist keine Audiodatei verfügbar.</p>'
+                            },
+                            'en': {
+                                title: `Number ${paddedNumber} - No audio file`,
+                                content: '<p>No audio file is available for this number.</p>'
+                            },
+                            'zh': {
+                                title: `编号 ${paddedNumber} - 没有音频文件`,
+                                content: '<p>此编号没有可用的音频文件。</p>'
+                            }
+                        };
+                        
+                        const content = noAudioTexts[currentLanguage] || noAudioTexts['de'];
+                        infoTitle.textContent = content.title;
+                        infoText.innerHTML = content.content;
                         infoText.style.display = 'block';
                     }
                 }
                 
-                // Zurück-Button anzeigen wenn Inhalte geladen wurden (auch bei nosound)
                 backButton.style.display = 'block';
                 
             } catch (error) {
                 console.error('Fehler beim Laden der Dateien:', error);
             }
             
-            // Eingabefeld leeren
             setTimeout(() => {
                 numberInput.value = '';
             }, 1000);
@@ -646,45 +756,88 @@
             audioPlayer.style.display = 'none';
             isPlaying = false;
             
-            // Button zurück auf Play setzen
             playStopButton.textContent = '▶';
             playStopButton.className = 'numpad-key play';
             
-            // Zurück zum Standard-Content
             resetToDefault();
             
             console.log('Wiedergabe gestoppt');
         }
         
-        // Audio-Player Event Listener (überarbeitet)
+        // Audio-Player Event Listener
         audioPlayer.addEventListener('ended', function() {
             isPlaying = false;
-            
-            // Button zurück auf Play setzen
             playStopButton.textContent = '▶';
             playStopButton.className = 'numpad-key play';
-            
             console.log('Wiedergabe beendet');
         });
         
         audioPlayer.addEventListener('error', function() {
             isPlaying = false;
-            
-            // Button zurück auf Play setzen
             playStopButton.textContent = '▶';
             playStopButton.className = 'numpad-key play';
-            
             console.error('Fehler beim Laden der Audio-Datei');
         });
         
-        // Beim Laden der Seite
+        // Beim Laden der Seite (erweitert)
         document.addEventListener('DOMContentLoaded', function() {
-            // Standard-Inhalte laden
-            loadDefaultContent();
-            
-            // Fokus auf Input setzen
+            // Standard auf Deutsch setzen
+            setLanguage('de');
             numberInput.focus();
         });
+        
+        // Zurück zum Standard-Content
+        function resetToDefault() {
+            infoTitle.textContent = defaultTitle;
+            infoImage.src = defaultImage;
+            infoText.innerHTML = defaultText;
+            infoText.style.display = 'block';
+            audioPlayer.style.display = 'none';
+            backButton.style.display = 'none';
+            
+            if (isPlaying) {
+                audioPlayer.pause();
+                isPlaying = false;
+                playStopButton.textContent = '▶';
+                playStopButton.className = 'numpad-key play';
+            }
+        }
+        
+        // Zahl eingeben (auf 3 Zeichen begrenzt)
+        function inputNumber(digit) {
+            const currentValue = numberInput.value;
+            
+            if (currentValue.length < 3) {
+                numberInput.value = currentValue + digit;
+                numberInput.dispatchEvent(new Event('input', { bubbles: true }));
+            }
+        }
+        
+        // Letzte Ziffer löschen
+        function backspace() {
+            const currentValue = numberInput.value;
+            numberInput.value = currentValue.slice(0, -1);
+            numberInput.dispatchEvent(new Event('input', { bubbles: true }));
+        }
+        
+        // Datei existiert prüfen
+        async function fileExists(url) {
+            try {
+                const response = await fetch(url, { method: 'HEAD' });
+                return response.ok;
+            } catch (error) {
+                return false;
+            }
+        }
+        
+        // Play/Stop Toggle Funktion
+        function togglePlayStop() {
+            if (isPlaying) {
+                stopAudio();
+            } else {
+                playNumber();
+            }
+        }
     </script>
 </body>
 </html>
