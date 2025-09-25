@@ -5,99 +5,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BLSound - Soundboard</title>
     
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Sora:ital,wght@1,800&display=swap" rel="stylesheet">
+    
     <style>
         body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
             background-color: #1d1d1b;
             color: white;
-            height: 100vh;
-            overflow: hidden;
-            /* Margins für 2000x1200px Display: 7mm oben, 20mm Seiten, 13mm unten */
-            padding: 1.85vh 4vw 3.43vh 4vw;
-            box-sizing: border-box;
+            font-family: Arial, sans-serif;
         }
         
         .main-container {
-            width: 100%;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
+            min-height: 100vh;
+            padding: 1.85vh 4vw 3.43vh 4vw;
         }
         
-        .content-wrapper {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 3vw;
-            flex: 1;
-            min-height: 0;
-            max-height: 90vh;
-        }
-        
-        .container, .info-container {
-            background: none;
-            padding: 2vh 2vw;
-            border-radius: 0vw;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-            
-        }
-
-        .button-container {
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-        }
-        
-        .input-group {
-            margin: 2vh 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        
-        label {
-            display: block;
-            margin-bottom: 0.5vh;
-            font-weight: bold;
-            text-align: center;
-        }
-        
-        input[type="number"] {
-            width: 80%;
-            max-width: 25vw;
-            padding: 1.5vh 2vw;
-            font-size: clamp(18px, 2vw, 32px);
-            border: 2px solid #ddd;
-            border-radius: 0.5vw;
-            box-sizing: border-box;
-            text-align: center;
-            margin: 0 auto;
-            display: block;
-        }
-        
-        /* Spinner-Buttons für number input entfernen */
-        input[type="number"]::-webkit-outer-spin-button,
-        input[type="number"]::-webkit-inner-spin-button {
-            -webkit-appearance: none;
-            margin: 0;
-        }
-    
-        
-        input[type="number"]:focus {
-            border-color: #4CAF50;
-            outline: none;
-        }
-        
-        /* Titel */
         .main-title {
-            text-align: center;
-            font-size: clamp(24px, 4vw, 60px);
-            line-height: 1;
-            margin-bottom: 2vh;
+            font-size: clamp(36px, 4vw, 60px);
             font-weight: bold;
+            line-height: 1;
+            margin-bottom: 2rem;
         }
         
         .main-title .subtitle {
@@ -107,35 +35,24 @@
             color: #FFC107;
         }
         
-        /* Numpad Styling */
         .numpad {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 1vw;
-            min-width: 20vw;
-            max-height: 70vh;
-            margin: 3vh auto;
-            padding: 2vh 2vw;
             background: #2d2d2d;
-            border-radius: 1vw;
+            border-radius: 1rem;
+            padding: 2rem;
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            max-width: clamp(250px, 50vw, 40vh);
         }
         
         .numpad-key {
             background-color: #1d1d1b;
             border: none;
-            border-radius: 0.8vw;
-            padding: 1vh 1vw;
+            border-radius: 0.8rem;
+            color: white;
             font-size: clamp(18px, 2vw, 36px);
             font-weight: bold;
-            color: white;
-            cursor: pointer;
-            transition: all 0.2s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
             aspect-ratio: 1;
-            min-height: 1vh;
+            transition: all 0.2s;
+            margin: 0.25rem;
         }
         
         .numpad-key:hover {
@@ -148,316 +65,263 @@
             transform: scale(0.95);
         }
         
-        .numpad-key.backspace {
+        .numpad-key.btn-danger {
             background-color: #ff6b6b;
-            color: white;
         }
         
-        .numpad-key.backspace:hover {
+        .numpad-key.btn-danger:hover {
             background-color: #ff5252;
         }
         
-        .numpad-key.play {
+        .numpad-key.btn-success {
             background-color: #4CAF50;
-            color: white;
         }
         
-        .numpad-key.play:hover {
+        .numpad-key.btn-success:hover {
             background-color: #45a049;
         }
         
-        /* Stop-Button Styling */
-        .numpad-key.stop {
+        .numpad-key.btn-warning {
             background-color: #FFC107;
             color: #333;
         }
         
-        .numpad-key.stop:hover {
+        .numpad-key.btn-warning:hover {
             background-color: #FFB300;
         }
         
-        /* Info Container Styling */
-        .info-header {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 2vw;
-            margin-bottom: 2vh;
-        }
-        
-        .info-container h2 {
-            color: white;
-            margin: 0;
-            text-align: center;
-            font-size: clamp(6px, 2.5vw, 36px);
-            max-width: 100%;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        
-        .back-button {
-            background-color: #6c757d;
-            color: white;
-            border: none;
-            padding: 1vh 2vw;
-            border-radius: 0.5vw;
-            cursor: pointer;
-            font-size: clamp(12px, 1.2vw, 18px);
-            transition: all 0.2s;
-        }
-        .info-button {
-            background-color: #6c757d;
-            color: white;
-            border: none;
-            padding: 2vh 2vw;
-            border-radius: 0.5vw;
-            cursor: pointer;
-            font-size: clamp(12px, 1.2vw, 18px);
-            transition: all 0.2s;
-            height: 6vh;
-            min-width: 10vw;
-            margin: 0 1vw;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-sizing: border-box;
-        }
-        
-        .back-button:hover {
-            background-color: #5a6268;
-        }
-        
         .info-image {
-            width: 100%;
-            height: 25vh;
-            object-fit: cover;
-            border-radius: 1vw;
-            margin: 2vh auto;
-            display: block;
+            border-radius: 1rem;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
         
         .info-text {
-            font-size: clamp(14px, 1.4vw, 20px);
-            line-height: 1.6;
-            color: white;
-            text-align: justify;
-            margin-top: 2vh;
-            flex: 1;
-            overflow-y: auto;
-            padding: 2vh 2vw;
             background-color: #2d2d2d;
-            border-radius: 0.8vw;
+            border-radius: 0.8rem;
             border: none;
-            min-height: 15vh;
+            color: white;
             max-height: 30vh;
+            overflow-y: auto;
         }
         
-        /* Scrollbar Styling für Webkit-Browser */
         .info-text::-webkit-scrollbar {
-            width: 0.5vw;
+            width: 0.5rem;
         }
         
         .info-text::-webkit-scrollbar-track {
             background: #464646;
-            border-radius: 0.25vw;
+            border-radius: 0.25rem;
         }
         
         .info-text::-webkit-scrollbar-thumb {
             background: #666;
-            border-radius: 0.25vw;
+            border-radius: 0.25rem;
         }
         
         .info-text::-webkit-scrollbar-thumb:hover {
             background: #777;
         }
         
-        /* Scrollbar für Firefox */
         .info-text {
             scrollbar-width: thin;
             scrollbar-color: #666 #464646;
         }
         
-        /* Audio Player Styling */
-        .audio-player {
-            margin: 2vh auto;
-            width: 100%;
-            height: 5vh;
-            display: none;
+        .info-title {
+            font-size: clamp(16px, 2.5vw, 36px);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
         
-        /* Desktop: Kein Scrolling */
-        @media (min-width: 1201px) {
-            body {
-                overflow: hidden;
-            }
-            
-            .main-container {
-                height: 100vh;
-                overflow: hidden;
-            }
+        .btn-secondary {
+            background-color: #6c757d;
+            border-color: #6c757d;
         }
         
-        /* Tablets: Zwei-Spalten Layout mit begrenzter Höhe */
-        @media (max-width: 1200px) and (min-width: 769px) {
-            body {
-                overflow: hidden;
-            }
-            
+        .btn-secondary:hover {
+            background-color: #5a6268;
+            border-color: #545b62;
+        }
+        
+        #numberInput {
+            max-width: clamp(250px, 50vw, 40vh);
+            text-align: center;
+            margin-left: auto;
+            margin-right: auto;
+            display: block;
+        }
+        
+        /* Spinner-Buttons entfernen */
+        input[type="number"]::-webkit-outer-spin-button,
+        input[type="number"]::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        
+        input[type="number"] {
+            -moz-appearance: textfield;
+        }
+        
+        /* Desktop Optimierungen */
+        @media (min-width: 1200px) {
             .content-wrapper {
-                grid-template-columns: 1fr;
-                gap: 3vh;
-                overflow-y: auto;
-            }
-            
-            body {
-                padding: 2vh 3vw;
-            }
-            
-            .info-header {
-                flex-direction: column;
-                gap: 1vh;
-            }
-            
-            .numpad {
-                max-width: 60vw;
-            }
-            
-            .info-image {
-                height: 30vh;
-            }
-            
-            .info-text {
-                min-height: 20vh;
-                max-height: 30vh;
+                height: 85vh;
             }
         }
         
-        /* Mobile: Scrollbares Ein-Spalten Layout */
+        /* Mobile Anpassungen */
         @media (max-width: 768px) {
-            body {
-                overflow-y: auto;
-                overflow-x: hidden;
-                height: auto;
-                min-height: 100vh;
-                padding: 2vh 3vw;
-            }
-            
             .main-container {
-                height: auto;
-                min-height: calc(100vh - 4vh);
-            }
-            
-            .content-wrapper {
-                grid-template-columns: 1fr;
-                gap: 4vh;
-            }
-            
-            .container, .info-container {
-                overflow: visible;
-            }
-            
-            .numpad {
-                max-width: 90vw;
-                gap: 2vw;
-                margin: 2vh auto;
+                padding: 2vh 3vw;
             }
             
             .numpad-key {
-                min-height: 12vh;
-                padding: 2vh 2vw;
-            }
-            
-            .info-image {
-                height: 30vh;
+                font-size: 1.5rem;
+                min-height: 60px;
             }
             
             .info-text {
-                min-height: 20vh;
                 max-height: 40vh;
-            }
-            
-            /* Mobile Scrollbar */
-            .info-text::-webkit-scrollbar {
-                width: 8px;
             }
         }
         
-        /* Spezifische Anpassungen für 2000x1200px Display */
+        /* Spezifische Anpassungen für große Displays */
         @media (min-width: 1900px) and (min-height: 1100px) {
-            body {
-                /* 7mm = ca. 26px bei 96dpi, 13mm = ca. 49px */
+            .main-container {
                 padding: calc(7mm * 0.75) calc(20mm * 0.75) calc(13mm * 0.75) calc(20mm * 0.75);
             }
         }
     </style>
 </head>
 <body>
-    <div class="main-container">
-        <div class="content-wrapper">
-            <!-- Numpad Container -->
-            <div class="container">
+    <div class="container-fluid main-container" style="padding-top: 7vh;">
+        <!-- Main Content Row -->
+        <div class="row content-wrapper g-4">
+            
+            <!-- Numpad Column -->
+            <div class="col-lg-6 col-12">
+                <div class="col-12 text-center">
                 <h1 class="main-title">
                     <b>BRUCHLAST</b><span class="subtitle">sound</span>
                 </h1>
-                
-                <div class="input-group">
-                    <input type="number" id="numberInput" placeholder="Nummer hier eingeben..." readonly maxlength="3">
-                </div>
-                
-                <!-- Eingebettetes Numpad -->
-                <div class="numpad">
-                    <button class="numpad-key" onclick="inputNumber('7')">7</button>
-                    <button class="numpad-key" onclick="inputNumber('8')">8</button>
-                    <button class="numpad-key" onclick="inputNumber('9')">9</button>
-                    <button class="numpad-key" onclick="inputNumber('4')">4</button>
-                    <button class="numpad-key" onclick="inputNumber('5')">5</button>
-                    <button class="numpad-key" onclick="inputNumber('6')">6</button>
-                    <button class="numpad-key" onclick="inputNumber('1')">1</button>
-                    <button class="numpad-key" onclick="inputNumber('2')">2</button>
-                    <button class="numpad-key" onclick="inputNumber('3')">3</button>
-                    <button class="numpad-key backspace" onclick="backspace()">⌫</button>
-                    <button class="numpad-key" onclick="inputNumber('0')">0</button>
-                    <button class="numpad-key play" id="playStopButton" onclick="togglePlayStop()">▶</button>
-                </div>
             </div>
-            
-            <!-- Info Container -->
-            <div class="info-container">
-                <img id="infoImage" 
-                     src="files/standard.jpg" 
-                     alt="BLSound Info Bild" 
-                     class="info-image">
-                
-                <div class="info-header">
-                    <button id="backButton" class="back-button" onclick="resetToDefault()" style="display: none;">← Zurück</button>
-                    <h2 id="infoTitle">Informationen</h2>
+            <div class="d-flex flex-column">
+                <!-- Input Field -->
+                <div class="mb-4">
+                    <input type="number" 
+                            id="numberInput" 
+                            class="form-control form-control-lg" 
+                            placeholder="Nummer hier eingeben..." 
+                            readonly 
+                            maxlength="3">
                 </div>
                 
-                <!-- Audio Player unter dem Bild -->
-                <audio id="audioPlayer" class="audio-player" controls>
-                    Ihr Browser unterstützt das Audio-Element nicht.
-                </audio>
-
-                <audio id="introAudio" controls>
-                    <source src="files/BLC_introaudio.mp3" type="audio/mpeg">
-                    Ihr Browser unterstützt das Audioelement nicht.
-                </audio>
-                
-                <div id="infoText" class="info-text">
-                    <p>Lade Informationen...</p>
+                <!-- Numpad -->
+                <div class="numpad mx-auto">
+                    <div class="row g-2">
+                        <div class="col-4">
+                            <button class="btn numpad-key w-100" onclick="inputNumber('7')">7</button>
+                        </div>
+                        <div class="col-4">
+                            <button class="btn numpad-key w-100" onclick="inputNumber('8')">8</button>
+                        </div>
+                        <div class="col-4">
+                            <button class="btn numpad-key w-100" onclick="inputNumber('9')">9</button>
+                        </div>
+                        <div class="col-4">
+                            <button class="btn numpad-key w-100" onclick="inputNumber('4')">4</button>
+                        </div>
+                        <div class="col-4">
+                            <button class="btn numpad-key w-100" onclick="inputNumber('5')">5</button>
+                        </div>
+                        <div class="col-4">
+                            <button class="btn numpad-key w-100" onclick="inputNumber('6')">6</button>
+                        </div>
+                        <div class="col-4">
+                            <button class="btn numpad-key w-100" onclick="inputNumber('1')">1</button>
+                        </div>
+                        <div class="col-4">
+                            <button class="btn numpad-key w-100" onclick="inputNumber('2')">2</button>
+                        </div>
+                        <div class="col-4">
+                            <button class="btn numpad-key w-100" onclick="inputNumber('3')">3</button>
+                        </div>
+                        <div class="col-4">
+                            <button class="btn numpad-key btn-danger w-100" onclick="backspace()">⌫</button>
+                        </div>
+                        <div class="col-4">
+                            <button class="btn numpad-key w-100" onclick="inputNumber('0')">0</button>
+                        </div>
+                        <div class="col-4">
+                            <button class="btn numpad-key btn-success w-100" id="playStopButton" onclick="togglePlayStop()">▶</button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="button-container">
-            <button class="info-button" onclick="window.open('https://www.th-luebeck.de/bruchlast/', '_blank')">Bruchlast-Chart</button>
-            <button class="info-button" onclick="setLanguage('de')">🇩🇪 Deutsch</button>
-            <button class="info-button" onclick="setLanguage('en')">🇬🇧 English</button>
-            <button class="info-button" onclick="setLanguage('zh')">🇨🇳 中文</button>
+            
+            <!-- Info Column -->
+            <div class="col-lg-6 col-12">
+                <div class="d-flex flex-column h-100">
+                    <!-- Image -->
+                    <div class="mb-3">
+                        <img id="infoImage" 
+                             src="files/standard.jpg" 
+                             alt="BLSound Info Bild" 
+                             class="img-fluid info-image w-100"
+                             style="height: 25vh; object-fit: cover;">
+                    </div>
+                    
+                    <!-- Header with Back Button and Title -->
+                    <div class="d-flex align-items-center justify-content-center mb-3 gap-3">
+                        <button id="backButton" 
+                                class="btn btn-warning" 
+                                onclick="resetToDefault()" 
+                                style="display: none;">
+                            ← 
+                        </button>
+                        <h2 id="infoTitle" class="info-title text-center m-0">Informationen</h2>
+                    </div>
+                    
+                    <!-- Audio Players -->
+                    <div class="mb-3">
+                        <audio id="audioPlayer" class="w-100" controls style="display: none;">
+                            Ihr Browser unterstützt das Audio-Element nicht.
+                        </audio>
+
+                        <audio id="introAudio" class="w-100" controls>
+                            <source src="files/BLC_introaudio.mp3" type="audio/mpeg">
+                            Ihr Browser unterstützt das Audioelement nicht.
+                        </audio>
+                    </div>
+                    
+                    <!-- Info Text -->
+                    <div id="infoText" class="info-text p-3 flex-grow-1">
+                        <p>Lade Informationen...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Button Row -->
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="d-flex flex-wrap justify-content-center gap-2">
+                    <button class="btn btn-warning" onclick="window.open('https://www.th-luebeck.de/bruchlast/', '_blank')">
+                        Zum Bruchlast-Chart
+                    </button>
+                    <span style="width:10rem;display:inline-block;"></span>
+                    <button class="btn btn-secondary" onclick="setLanguage('de')">🇩🇪 Deutsch</button>
+                    <button class="btn btn-secondary" onclick="setLanguage('en')">🇬🇧 English</button>
+                    <button class="btn btn-secondary" onclick="setLanguage('zh')">🇨🇳 中文</button>
+                </div>
+            </div>
         </div>
     </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
     <script>
         const numberInput = document.getElementById('numberInput');
@@ -489,16 +353,18 @@
             currentLanguage = lang;
             
             // Visuelle Anzeige der aktiven Sprache
-            document.querySelectorAll('.info-button').forEach(btn => {
-                btn.style.backgroundColor = '#6c757d';
-                btn.style.color = 'white';
+            document.querySelectorAll('.btn-secondary').forEach(btn => {
+                if (btn.onclick && btn.onclick.toString().includes('setLanguage')) {
+                    btn.classList.remove('btn-success');
+                    btn.classList.add('btn-secondary');
+                }
             });
             
             // Aktiven Sprach-Button hervorheben
             const activeButton = document.querySelector(`[onclick="setLanguage('${lang}')"]`);
             if (activeButton) {
-                activeButton.style.backgroundColor = '#4CAF50';
-                activeButton.style.color = 'white';
+                activeButton.classList.remove('btn-secondary');
+                activeButton.classList.add('btn-success');
             }
             
             // Standard-Inhalte in neuer Sprache laden
@@ -515,7 +381,62 @@
             return `${baseName}_${currentLanguage}.${extension}`;
         }
         
-        // Standard-Inhalte laden (erweitert für Mehrsprachigkeit)
+        // Fallback-Inhalte je nach Sprache
+        function setFallbackContent() {
+            const fallbackTexts = {
+                'de': {
+                    title: 'Wie funktioniert das Soundboard?',
+                    content: `
+                        <p>Willkommen bei BLSound! Dieses Kiosk-System ermöglicht es Ihnen, durch einfache Eingabe einer dreistelligen Nummer Audioinhalte abzuspielen.</p>
+                        <p><strong>So funktioniert's:</strong></p>
+                        <ul>
+                            <li>Geben Sie eine Nummer zwischen 001 und 999 ein</li>
+                            <li>Verwenden Sie das Numpad für die Eingabe</li>
+                            <li>Drücken Sie den Play-Button (▶) zum Abspielen</li>
+                            <li>Mit dem Backspace (⌫) können Sie Zahlen löschen</li>
+                        </ul>
+                        <p>Das System ist optimiert für Touch-Bedienung und bietet eine intuitive Benutzeroberfläche für alle Altersgruppen.</p>
+                    `
+                },
+                'en': {
+                    title: 'How does the Soundboard work?',
+                    content: `
+                        <p>Welcome to BLSound! This kiosk system allows you to play audio content by simply entering a three-digit number.</p>
+                        <p><strong>How it works:</strong></p>
+                        <ul>
+                            <li>Enter a number between 001 and 999</li>
+                            <li>Use the numpad for input</li>
+                            <li>Press the Play button (▶) to start playback</li>
+                            <li>Use Backspace (⌫) to delete numbers</li>
+                        </ul>
+                        <p>The system is optimized for touch operation and provides an intuitive user interface for all age groups.</p>
+                    `
+                },
+                'zh': {
+                    title: '声音板如何工作？',
+                    content: `
+                        <p>欢迎使用BLSound！这个自助服务系统允许您通过简单输入三位数字来播放音频内容。</p>
+                        <p><strong>使用方法：</strong></p>
+                        <ul>
+                            <li>输入001到999之间的数字</li>
+                            <li>使用数字键盘输入</li>
+                            <li>按播放按钮（▶）开始播放</li>
+                            <li>使用退格键（⌫）删除数字</li>
+                        </ul>
+                        <p>该系统针对触摸操作进行了优化，为所有年龄组提供直观的用户界面。</p>
+                    `
+                }
+            };
+            
+            const content = fallbackTexts[currentLanguage] || fallbackTexts['de'];
+            defaultTitle = content.title;
+            defaultText = content.content;
+            
+            infoTitle.textContent = defaultTitle;
+            infoText.innerHTML = defaultText;
+        }
+        
+        // Standard-Inhalte laden
         async function loadDefaultContent() {
             try {
                 const howToFile = getLocalizedFilename('howTo', 'html');
@@ -535,9 +456,7 @@
                     
                     defaultText = doc.body.innerHTML;
                     infoText.innerHTML = defaultText;
-                    infoText.style.display = 'block';
                 } else {
-                    // Fallback-Texte je nach Sprache
                     setFallbackContent();
                 }
                 
@@ -547,7 +466,6 @@
                     defaultImage = `files/${standardImage}`;
                     infoImage.src = defaultImage;
                 } else {
-                    // Fallback auf deutsches Standard-Bild
                     defaultImage = 'files/standard.jpg';
                     infoImage.src = defaultImage;
                 }
@@ -558,8 +476,7 @@
             }
         }
         
-        
-        // HTML-Datei laden (erweitert für Mehrsprachigkeit)
+        // HTML-Datei laden
         async function loadHtmlFile(number) {
             try {
                 const htmlFile = getLocalizedFilename(number, 'html');
@@ -595,10 +512,9 @@
             return null;
         }
         
-        // Bild mit verschiedenen Formaten und Sprachen suchen
+        // Bild suchen
         async function findImage(number) {
             for (const ext of imageExtensions) {
-                // Erst mit Sprachsuffix versuchen
                 const localizedUrl = `files/${getLocalizedFilename(number, ext)}`;
                 if (await fileExists(localizedUrl)) {
                     return localizedUrl;
@@ -624,7 +540,7 @@
             return null;
         }
         
-        // Play Button Funktion (erweitert für Mehrsprachigkeit)
+        // Play Button Funktion
         async function playNumber() {
             const number = numberInput.value;
             if (!number) {
@@ -635,7 +551,6 @@
             const paddedNumber = number.padStart(3, '0');
             
             try {
-                // Audio mit Sprachsuffix suchen
                 let audioUrl = `./files/${getLocalizedFilename(paddedNumber, 'mp3')}`;
                 let audioExists = await fileExists(audioUrl);
                 
@@ -666,7 +581,8 @@
                         isPlaying = true;
                         
                         playStopButton.textContent = '⏹';
-                        playStopButton.className = 'numpad-key stop';
+                        playStopButton.classList.remove('btn-success');
+                        playStopButton.classList.add('btn-warning');
                         
                         console.log(`Spiele Nummer ${paddedNumber} ab`);
                     } catch (playError) {
@@ -693,18 +609,16 @@
                         }
                         
                         infoText.innerHTML = htmlData.content;
-                        infoText.style.display = 'block';
                     } else {
                         infoText.innerHTML = '';
-                        infoText.style.display = 'none';
                         infoTitle.textContent = `Nummer ${paddedNumber}`;
                         console.log(`Keine HTML-Datei für Nummer ${paddedNumber} gefunden`);
+                        infoText.style.display = 'none';
                     }
                     
                 } else {
                     console.log(`Keine Audio-Datei für Nummer ${paddedNumber} gefunden`);
                     
-                    // Nosound SVG und HTML in entsprechender Sprache
                     const nosoundSvg = getLocalizedFilename('nosound', 'svg');
                     if (await fileExists(`files/${nosoundSvg}`)) {
                         infoImage.src = `files/${nosoundSvg}`;
@@ -726,7 +640,6 @@
                             infoTitle.textContent = noAudioTexts[currentLanguage] || noAudioTexts['de'];
                         }
                         infoText.innerHTML = nosoundData.content;
-                        infoText.style.display = 'block';
                     } else {
                         const noAudioTexts = {
                             'de': {
@@ -746,7 +659,6 @@
                         const content = noAudioTexts[currentLanguage] || noAudioTexts['de'];
                         infoTitle.textContent = content.title;
                         infoText.innerHTML = content.content;
-                        infoText.style.display = 'block';
                     }
                 }
                 
@@ -761,7 +673,7 @@
             }, 1000);
         }
         
-        // Audio stoppen und zurücksetzen
+        // Audio stoppen
         function stopAudio() {
             audioPlayer.pause();
             audioPlayer.currentTime = 0;
@@ -770,7 +682,8 @@
             isPlaying = false;
             
             playStopButton.textContent = '▶';
-            playStopButton.className = 'numpad-key play';
+            playStopButton.classList.remove('btn-warning');
+            playStopButton.classList.add('btn-success');
             
             resetToDefault();
             
@@ -781,20 +694,21 @@
         audioPlayer.addEventListener('ended', function() {
             isPlaying = false;
             playStopButton.textContent = '▶';
-            playStopButton.className = 'numpad-key play';
+            playStopButton.classList.remove('btn-warning');
+            playStopButton.classList.add('btn-success');
             console.log('Wiedergabe beendet');
         });
         
         audioPlayer.addEventListener('error', function() {
             isPlaying = false;
             playStopButton.textContent = '▶';
-            playStopButton.className = 'numpad-key play';
+            playStopButton.classList.remove('btn-warning');
+            playStopButton.classList.add('btn-success');
             console.error('Fehler beim Laden der Audio-Datei');
         });
         
-        // Beim Laden der Seite (erweitert)
+        // Beim Laden der Seite
         document.addEventListener('DOMContentLoaded', function() {
-            // Standard auf Deutsch setzen
             setLanguage('de');
             numberInput.focus();
         });
@@ -804,20 +718,21 @@
             infoTitle.textContent = defaultTitle;
             infoImage.src = defaultImage;
             infoText.innerHTML = defaultText;
-            infoText.style.display = 'block';
             audioPlayer.style.display = 'none';
             introAudio.style.display = 'block';
             backButton.style.display = 'none';
+            infoText.style.display = 'block';
             
             if (isPlaying) {
                 audioPlayer.pause();
                 isPlaying = false;
                 playStopButton.textContent = '▶';
-                playStopButton.className = 'numpad-key play';
+                playStopButton.classList.remove('btn-warning');
+                playStopButton.classList.add('btn-success');
             }
         }
         
-        // Zahl eingeben (auf 3 Zeichen begrenzt)
+        // Zahl eingeben
         function inputNumber(digit) {
             const currentValue = numberInput.value;
             
@@ -844,7 +759,7 @@
             }
         }
         
-        // Play/Stop Toggle Funktion
+        // Play/Stop Toggle
         function togglePlayStop() {
             if (isPlaying) {
                 stopAudio();
