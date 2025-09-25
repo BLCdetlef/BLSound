@@ -189,8 +189,13 @@
             color: white;
             margin: 0;
             text-align: center;
-            font-size: clamp(18px, 2.5vw, 36px);
+            font-size: clamp(6px, 2.5vw, 36px);
+            max-width: 100%;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
+
         
         .back-button {
             background-color: #6c757d;
@@ -247,7 +252,7 @@
             border-radius: 0.8vw;
             border: none;
             min-height: 15vh;
-            max-height: 40vh;
+            max-height: 30vh;
         }
         
         /* Scrollbar Styling für Webkit-Browser */
@@ -435,6 +440,11 @@
                 <audio id="audioPlayer" class="audio-player" controls>
                     Ihr Browser unterstützt das Audio-Element nicht.
                 </audio>
+
+                <audio id="introAudio" controls>
+                    <source src="files/BLC_introaudio.mp3" type="audio/mpeg">
+                    Ihr Browser unterstützt das Audioelement nicht.
+                </audio>
                 
                 <div id="infoText" class="info-text">
                     <p>Lade Informationen...</p>
@@ -452,6 +462,7 @@
     <script>
         const numberInput = document.getElementById('numberInput');
         const audioPlayer = document.getElementById('audioPlayer');
+        const introAudio = document.getElementById('introAudio');
         const infoImage = document.getElementById('infoImage');
         const infoText = document.getElementById('infoText');
         const infoTitle = document.getElementById('infoTitle');
@@ -648,6 +659,7 @@
                     currentAudioUrl = audioUrl;
                     audioPlayer.src = audioUrl;
                     audioPlayer.style.display = 'block';
+                    introAudio.style.display = 'none';
                     
                     try {
                         await audioPlayer.play();
@@ -754,6 +766,7 @@
             audioPlayer.pause();
             audioPlayer.currentTime = 0;
             audioPlayer.style.display = 'none';
+            introAudio.style.display = 'block';
             isPlaying = false;
             
             playStopButton.textContent = '▶';
@@ -793,6 +806,7 @@
             infoText.innerHTML = defaultText;
             infoText.style.display = 'block';
             audioPlayer.style.display = 'none';
+            introAudio.style.display = 'block';
             backButton.style.display = 'none';
             
             if (isPlaying) {
