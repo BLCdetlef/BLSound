@@ -212,7 +212,7 @@
                     <input type="number" 
                             id="numberInput" 
                             class="form-control form-control-lg" 
-                            placeholder="Nummer hier eingeben..." 
+                            placeholder="000-999" 
                             readonly 
                             maxlength="3">
                 </div>
@@ -259,6 +259,17 @@
                     </div>
                 </div>
             </div>
+            <!-- Button Row -->
+            <div class="row mt-4">
+                <div class="col-12">
+                    <div class="d-flex flex-wrap justify-content-center gap-2">
+                        
+                        <button class="btn btn-secondary" onclick="setLanguage('de')">🇩🇪 Deutsch</button>
+                        <button class="btn btn-secondary" onclick="setLanguage('en')">🇬🇧 English</button>
+                        <button class="btn btn-secondary" onclick="setLanguage('zh')">🇨🇳 中文</button>
+                    </div>
+                </div>
+            </div>
         </div>
             
             <!-- Info Column -->
@@ -300,21 +311,16 @@
                     <div id="infoText" class="info-text p-3 flex-grow-1">
                         <p>Lade Informationen...</p>
                     </div>
+                    
                 </div>
             </div>
         </div>
-
-        <!-- Button Row -->
-        <div class="row mt-4">
-            <div class="col-12">
+        <div class="row mt-4"></div>
+            <div class="col-12"></div>
                 <div class="d-flex flex-wrap justify-content-center gap-2">
                     <button class="btn btn-warning" onclick="window.open('https://www.th-luebeck.de/bruchlast/', '_blank')">
                         Zum Bruchlast-Chart
                     </button>
-                    <span style="width:10rem;display:inline-block;"></span>
-                    <button class="btn btn-secondary" onclick="setLanguage('de')">🇩🇪 Deutsch</button>
-                    <button class="btn btn-secondary" onclick="setLanguage('en')">🇬🇧 English</button>
-                    <button class="btn btn-secondary" onclick="setLanguage('zh')">🇨🇳 中文</button>
                 </div>
             </div>
         </div>
