@@ -352,12 +352,10 @@
         function setLanguage(lang) {
             currentLanguage = lang;
             
-            // Visuelle Anzeige der aktiven Sprache
-            document.querySelectorAll('.btn-secondary').forEach(btn => {
-                if (btn.onclick && btn.onclick.toString().includes('setLanguage')) {
-                    btn.classList.remove('btn-success');
-                    btn.classList.add('btn-secondary');
-                }
+            // Alle Sprach-Buttons zurücksetzen (sowohl btn-secondary als auch btn-success)
+            document.querySelectorAll('button[onclick*="setLanguage"]').forEach(btn => {
+                btn.classList.remove('btn-success');
+                btn.classList.add('btn-secondary');
             });
             
             // Aktiven Sprach-Button hervorheben
